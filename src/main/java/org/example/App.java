@@ -10,19 +10,19 @@ public class App {
 
         MongoClient mongo = new MongoClient("localhost", 27017);
 
-        MongoDatabase db = mongo.getDatabase("Concesionario");
+        MongoDatabase db = mongo.getDatabase("RefugioDB");
 
-        MongoCollection<Document> coches = db.getCollection("Coches");
+        MongoCollection<Document> animales = db.getCollection("Animales");
 
-        Document coche = new Document("id", 1)
-                .append("marca", "Toyota")
-                .append("modelo", "Corolla")
-                .append("anio", 2022)
-                .append("precio", 24500.50)
-                .append("color", "Blanco")
-                .append("electrico", false);
+        Document animal = new Document("nombre", "pepe")
+                .append("especie", "perro")
+                .append("raza", "rottweiler")
+                .append("edad", 10)
+                .append("sexo", "macho")
+                .append("descripcion", "muy malo, y vilento, calvo y feroz")
+                .append("fechaIngreso", 2019-06-07);
 
-        coches.insertOne(coche);
+        animales.insertOne(animal);
 
         mongo.close();
     }
