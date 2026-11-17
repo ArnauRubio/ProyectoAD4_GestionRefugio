@@ -1,6 +1,8 @@
 package Models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Adopcion {
@@ -11,8 +13,8 @@ public class Adopcion {
     private int id;                    // se guarda como _id
     private int idAnimal;              // referencia a animales._id
     private String dniAdoptante;       // referencia a adoptantes._id
-    private String fechaSolicitud;     // aaaa-mm-dd
-    private String fechaResolucion;    // puede ser null
+    private Date fechaSolicitud;     // aaaa-mm-dd
+    private Date fechaResolucion;    // puede ser null
     private String estado;
     private String observaciones;
     private List<Seguimiento> seguimiento = new ArrayList<>();
@@ -21,7 +23,7 @@ public class Adopcion {
     public Adopcion() {
     }
 
-    public Adopcion(int id, int idAnimal, String dniAdoptante, String fechaSolicitud, String observaciones) {
+    public Adopcion(int id, int idAnimal, String dniAdoptante, Date fechaSolicitud, String observaciones) {
         this.id = id;
         this.idAnimal = idAnimal;
         this.dniAdoptante = dniAdoptante;
@@ -54,19 +56,19 @@ public class Adopcion {
         this.dniAdoptante = dniAdoptante;
     }
 
-    public String getFechaSolicitud() {
+    public Date getFechaSolicitud() {
         return fechaSolicitud;
     }
 
-    public void setFechaSolicitud(String fechaSolicitud) {
+    public void setFechaSolicitud(Date fechaSolicitud) {
         this.fechaSolicitud = fechaSolicitud;
     }
 
-    public String getFechaResolucion() {
+    public Date getFechaResolucion() {
         return fechaResolucion;
     }
 
-    public void setFechaResolucion(String fechaResolucion) {
+    public void setFechaResolucion(Date fechaResolucion) {
         this.fechaResolucion = fechaResolucion;
     }
 

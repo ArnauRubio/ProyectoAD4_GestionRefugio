@@ -1,27 +1,30 @@
 package Models;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 /**
  * Visita o revisión de seguimiento de una adopción aprobada.
  * Se guarda EMBEBIDO en el array "seguimiento" de la adopción.
  */
 public class Seguimiento {
 
-    private String fecha;       // aaaa-mm-dd
+    private Date fecha;       // aaaa-mm-dd
     private String comentario;
 
     public Seguimiento() {
     }
 
-    public Seguimiento(String fecha, String comentario) {
+    public Seguimiento(Date fecha, String comentario) {
         this.fecha = fecha;
         this.comentario = comentario;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

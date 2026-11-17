@@ -52,13 +52,13 @@ public class AnimalDao extends Dao<Animal, Integer> implements IAnimalDao {
         a.setEdad(leerEntero(d, "edad"));
         a.setSexo(d.getString("sexo"));
         a.setDescripcion(d.getString("descripcion"));
-        a.setFechaIngreso(d.getString("fechaIngreso"));
+        a.setFechaIngreso(d.getDate("fechaIngreso"));
         a.setEstado(d.getString("estado"));
         a.setEliminado(d.getBoolean("eliminado", false));
 
         for (Document h : d.getList("historialMedico", Document.class, new ArrayList<>())) {
             a.getHistorialMedico().add(new RegistroMedico(
-                    h.getString("fecha"), h.getString("descripcion"), h.getString("veterinario")));
+                    h.getDate("fecha"), h.getString("descripcion"), h.getString("veterinario")));
         }
         return a;
     }

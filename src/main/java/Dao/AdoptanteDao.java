@@ -48,7 +48,7 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
         a.setApellidos(d.getString("apellidos"));
         a.setTelefono(d.getString("telefono"));
         a.setEmail(d.getString("email"));
-        a.setFechaRegistro(d.getString("fechaRegistro"));
+        a.setFechaRegistro(d.getDate("fechaRegistro"));
         a.setEliminado(d.getBoolean("eliminado", false));
 
         Document dir = d.get("direccion", Document.class);

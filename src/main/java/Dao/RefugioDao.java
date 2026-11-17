@@ -25,7 +25,7 @@ public class RefugioDao implements IRefugioDao {
         Refugio r = new Refugio();
         r.setNombre(d.getString("nombre"));
         r.setCif(d.getString("cif"));
-        r.setFechaApertura(d.getString("fechaApertura"));
+        r.setFechaApertura(d.getDate("fechaApertura"));
         r.setTelefono(d.getString("telefono"));
         r.setEmail(d.getString("email"));
         Document dir = d.get("direccion", Document.class);

@@ -4,6 +4,7 @@ import Dao.Dao;
 import Models.Adopcion;
 import Models.Seguimiento;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IAdopcionDao extends IDao<Adopcion, Integer> {
@@ -22,7 +23,7 @@ public interface IAdopcionDao extends IDao<Adopcion, Integer> {
     /**
      * Cambia el estado y guarda la fecha de resolución.
      */
-    boolean cambiarEstado(int idAdopcion, String estado, String fechaResolucion);
+    boolean cambiarEstado(int idAdopcion, String estado, Date fechaResolucion);
 
     /**
      * Añade un seguimiento al array seguimiento ($push).

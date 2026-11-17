@@ -1,6 +1,8 @@
 package Models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Adoptante {
@@ -10,7 +12,7 @@ public class Adoptante {
     private String telefono;
     private Direccion direccion;     // documento embebido
     private String email;
-    private String fechaRegistro;    // aaaa-mm-dd
+    private Date fechaRegistro;    // aaaa-mm-dd
     private List<String> preferencias = new ArrayList<>();  // array de textos
     private boolean eliminado;
 
@@ -18,7 +20,7 @@ public class Adoptante {
     }
 
     public Adoptante(String dni, String nombre, String apellidos, String telefono,
-                     Direccion direccion, String email, String fechaRegistro) {
+                     Direccion direccion, String email, Date fechaRegistro) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -76,11 +78,11 @@ public class Adoptante {
         this.email = email;
     }
 
-    public String getFechaRegistro() {
+    public Date getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(String fechaRegistro) {
+    public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
 

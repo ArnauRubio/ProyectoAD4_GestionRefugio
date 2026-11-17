@@ -1,29 +1,32 @@
 package Models;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 /**
  * Un registro del historial médico de un animal.
  * Se guarda EMBEBIDO dentro del documento del animal (array "historialMedico").
  */
 public class RegistroMedico {
 
-    private String fecha;        // formato aaaa-mm-dd
+    private Date fecha;        // formato aaaa-mm-dd
     private String descripcion;
     private String veterinario;
 
     public RegistroMedico() {
     }
 
-    public RegistroMedico(String fecha, String descripcion, String veterinario) {
+    public RegistroMedico(Date fecha, String descripcion, String veterinario) {
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.veterinario = veterinario;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

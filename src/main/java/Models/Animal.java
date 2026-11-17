@@ -1,6 +1,8 @@
 package Models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Animal {
@@ -17,7 +19,7 @@ public class Animal {
     private int edad;
     private String sexo;
     private String descripcion;
-    private String fechaIngreso;    // aaaa-mm-dd
+    private Date fechaIngreso;    // aaaa-mm-dd
     private String estado;
     private List<RegistroMedico> historialMedico = new ArrayList<>();
     private boolean eliminado;      // borrado lógico
@@ -26,7 +28,7 @@ public class Animal {
     }
 
     public Animal(int id, String nombre, String especie, String raza, int edad, String sexo,
-                  String descripcion, String fechaIngreso, String estado) {
+                  String descripcion, Date fechaIngreso, String estado) {
         this.id = id;
         this.nombre = nombre;
         this.especie = especie;
@@ -94,11 +96,11 @@ public class Animal {
         this.descripcion = descripcion;
     }
 
-    public String getFechaIngreso() {
+    public Date getFechaIngreso() {
         return fechaIngreso;
     }
 
-    public void setFechaIngreso(String fechaIngreso) {
+    public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
     }
 

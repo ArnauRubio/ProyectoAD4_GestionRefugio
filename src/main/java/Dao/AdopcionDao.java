@@ -13,6 +13,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao {
@@ -45,14 +46,14 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
         a.setId(leerEntero(d, "_id"));
         a.setIdAnimal(leerEntero(d, "idAnimal"));
         a.setDniAdoptante(d.getString("dniAdoptante"));
-        a.setFechaSolicitud(d.getString("fechaSolicitud"));
-        a.setFechaResolucion(d.getString("fechaResolucion"));
+        a.setFechaSolicitud(d.getDate("fechaSolicitud"));
+        a.setFechaResolucion(d.getDate("fechaResolucion"));
         a.setEstado(d.getString("estado"));
         a.setObservaciones(d.getString("observaciones"));
         a.setEliminado(d.getBoolean("eliminado", false));
 
         for (Document s : d.getList("seguimiento", Document.class, new ArrayList<>())) {
-            a.getSeguimiento().add(new Seguimiento(s.getString("fecha"), s.getString("comentario")));
+            a.getSeguimiento().add(new Seguimiento(s.getDate("fecha"), s.getString("comentario")));
         }
         return a;
     }
@@ -75,7 +76,7 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
     }
 
     @Override
-    public boolean cambiarEstado(int idAdopcion, String estado, String fechaResolucion) {
+    public boolean cambiarEstado(int idAdopcion, String estado, Date fechaResolucion) {
         return coleccion.updateOne(Filters.eq("_id", idAdopcion),
                         Updates.combine(Updates.set("estado", estado), Updates.set("fechaResolucion", fechaResolucion)))
                 .getMatchedCount() > 0;

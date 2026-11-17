@@ -144,7 +144,7 @@ public class GestionDao implements IGestionDao {
         if (valor instanceof Number) {
             tipo += ((Number) valor).intValue() == 1 ? "ascendente" : "descendente";
         } else {
-            tipo += String.valueOf(valor);   // text, 2dsphere, hashed...
+            tipo += String.valueOf(valor);   // text, hashed...
         }
         return tipo;
     }

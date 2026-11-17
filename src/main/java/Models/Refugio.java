@@ -1,9 +1,11 @@
 package Models;
 
+import java.util.Date;
+
 public class Refugio {
     private String nombre;           // razón social
     private String cif;
-    private String fechaApertura;    // aaaa-mm-dd
+    private Date fechaApertura;    // aaaa-mm-dd
     private Direccion direccion;     // documento embebido
     private String telefono;
     private String email;
@@ -11,7 +13,7 @@ public class Refugio {
     public Refugio() {
     }
 
-    public Refugio(String nombre, String cif, String fechaApertura, Direccion direccion,
+    public Refugio(String nombre, String cif, Date fechaApertura, Direccion direccion,
                    String telefono, String email) {
         this.nombre = nombre;
         this.cif = cif;
@@ -37,11 +39,11 @@ public class Refugio {
         this.cif = cif;
     }
 
-    public String getFechaApertura() {
+    public Date getFechaApertura() {
         return fechaApertura;
     }
 
-    public void setFechaApertura(String fechaApertura) {
+    public void setFechaApertura(Date fechaApertura) {
         this.fechaApertura = fechaApertura;
     }
 
