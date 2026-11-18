@@ -12,7 +12,7 @@ public class Adopcion {
 
     private int id;                    // se guarda como _id
     private int idAnimal;              // referencia a animales._id
-    private String dniAdoptante;       // referencia a adoptantes._id
+    private int idAdoptante;       // referencia a adoptantes._id
     private Date fechaSolicitud;     // aaaa-mm-dd
     private Date fechaResolucion;    // puede ser null
     private String estado;
@@ -23,10 +23,10 @@ public class Adopcion {
     public Adopcion() {
     }
 
-    public Adopcion(int id, int idAnimal, String dniAdoptante, Date fechaSolicitud, String observaciones) {
+    public Adopcion(int id, int idAnimal, int idAdoptante, Date fechaSolicitud, String observaciones) {
         this.id = id;
         this.idAnimal = idAnimal;
-        this.dniAdoptante = dniAdoptante;
+        this.idAdoptante = idAdoptante;
         this.fechaSolicitud = fechaSolicitud;
         this.observaciones = observaciones;
         this.estado = PENDIENTE;
@@ -48,12 +48,12 @@ public class Adopcion {
         this.idAnimal = idAnimal;
     }
 
-    public String getDniAdoptante() {
-        return dniAdoptante;
+    public int getIdAdoptante() {
+        return idAdoptante;
     }
 
-    public void setDniAdoptante(String dniAdoptante) {
-        this.dniAdoptante = dniAdoptante;
+    public void setIdAdoptante(int idAdoptante) {
+        this.idAdoptante = idAdoptante;
     }
 
     public Date getFechaSolicitud() {
@@ -106,7 +106,7 @@ public class Adopcion {
 
     @Override
     public String toString() {
-        return "[" + id + "] animal: " + idAnimal + " | adoptante: " + dniAdoptante
+        return "[" + id + "] animal: " + idAnimal + " | adoptante: " + idAdoptante
                 + " | solicitud: " + fechaSolicitud
                 + " | resolución: " + (fechaResolucion == null ? "-" : fechaResolucion)
                 + " | estado: " + estado + (eliminado ? " (ELIMINADA)" : "")

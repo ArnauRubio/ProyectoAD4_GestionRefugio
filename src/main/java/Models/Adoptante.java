@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Adoptante {
+    private int id;
     private String dni;              // se guarda como _id
     private String nombre;
     private String apellidos;
@@ -19,8 +20,9 @@ public class Adoptante {
     public Adoptante() {
     }
 
-    public Adoptante(String dni, String nombre, String apellidos, String telefono,
+    public Adoptante(int id, String dni, String nombre, String apellidos, String telefono,
                      String direccion, String email, Date fechaRegistro) {
+        this.id = id;
         this.dni = dni;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -28,6 +30,14 @@ public class Adoptante {
         this.direccion = direccion;
         this.email = email;
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDni() {
@@ -104,7 +114,7 @@ public class Adoptante {
 
     @Override
     public String toString() {
-        return "[" + dni + "] " + nombre + " " + apellidos + " | tel: " + telefono + " | " + email
+        return "[" + id + "] " + dni + " | " + nombre + " " + apellidos + " | tel: " + telefono + " | " + email
                 + (eliminado ? " (ELIMINADO)" : "")
                 + "\n      Dirección: " + direccion
                 + "\n      Registro: " + fechaRegistro + " | Preferencias: " + preferencias;

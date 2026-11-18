@@ -13,7 +13,7 @@ public interface IAdopcionDao extends IDao<Adopcion, Integer> {
     /**
      * Todas las solicitudes/adopciones de un adoptante.
      */
-    List<Adopcion> buscarPorAdoptante(String dni);
+    List<Adopcion> buscarPorAdoptante(int idAdoptante);
 
     /**
      * Todas las solicitudes/adopciones de un animal.

@@ -14,7 +14,7 @@ import org.bson.conversions.Bson;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDao {
+public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteDao {
     public AdoptanteDao() {
         super("adoptantes");
     }
@@ -24,7 +24,8 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
     @Override
     protected Document aDocumento(Adoptante a) {
 
-        return new Document("_id", a.getDni())
+        return new Document("_id", a.getId())
+                .append("_id", a.getDni())
                 .append("nombre", a.getNombre())
                 .append("apellidos", a.getApellidos())
                 .append("telefono", a.getTelefono())
@@ -38,7 +39,8 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
     @Override
     protected Adoptante aObjeto(Document d) {
         Adoptante a = new Adoptante();
-        a.setDni(d.getString("_id"));
+        a.setId(leerEntero(d, "_id"));
+        a.setDni(d.getString("dni"));
         a.setNombre(d.getString("nombre"));
         a.setApellidos(d.getString("apellidos"));
         a.setTelefono(d.getString("telefono"));
@@ -51,8 +53,8 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
     }
 
     @Override
-    protected String getId(Adoptante a) {
-        return a.getDni();
+    protected Integer getId(Adoptante a) {
+        return a.getId();
     }
 
     /**
@@ -65,9 +67,29 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
 
     // ---------- Específicos ----------
 
+    public Adoptante buscarPorDni(String dni) {
+        Document d = coleccion.find(Filters.eq("dni", dni)).first();
+        return d == null ? null : aObjeto(d);
+    }
+
     @Override
-    public boolean anadirPreferencia(String dni, String preferencia) {
-        return coleccion.updateOne(Filters.eq("_id", dni), Updates.addToSet("preferencias", preferencia))
+    public boolean anadirPreferencia(int idAdoptante, String preferencia) {
+        return coleccion.updateOne(Filters.eq("_id", idAdoptante), Updates.addToSet("preferencias", preferencia))
                 .getMatchedCount() > 0;
+    }
+
+    @Override
+    public Adoptante buscarPorId(Integer id) {
+        return null;
+    }
+
+    @Override
+    public boolean eliminar(Integer id) {
+        return false;
+    }
+
+    @Override
+    public boolean marcarEliminado(Integer id) {
+        return false;
     }
 }

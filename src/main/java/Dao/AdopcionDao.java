@@ -31,7 +31,7 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
         }
         return new Document("_id", a.getId())
                 .append("idAnimal", a.getIdAnimal())            // REFERENCIA a animales
-                .append("dniAdoptante", a.getDniAdoptante())    // REFERENCIA a adoptantes
+                .append("idAdoptante", a.getIdAdoptante())    // REFERENCIA a adoptantes
                 .append("fechaSolicitud", a.getFechaSolicitud())
                 .append("fechaResolucion", a.getFechaResolucion())
                 .append("estado", a.getEstado())
@@ -45,7 +45,7 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
         Adopcion a = new Adopcion();
         a.setId(leerEntero(d, "_id"));
         a.setIdAnimal(leerEntero(d, "idAnimal"));
-        a.setDniAdoptante(d.getString("dniAdoptante"));
+        a.setIdAdoptante(leerEntero(d, "idAdoptante"));
         a.setFechaSolicitud(d.getDate("fechaSolicitud"));
         a.setFechaResolucion(d.getDate("fechaResolucion"));
         a.setEstado(d.getString("estado"));
@@ -66,8 +66,8 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
     // ---------- Específicos ----------
 
     @Override
-    public List<Adopcion> buscarPorAdoptante(String dni) {
-        return buscar(Filters.and(Filters.eq("dniAdoptante", dni), Filters.ne("eliminado", true)));
+    public List<Adopcion> buscarPorAdoptante(int idAdoptante) {
+        return buscar(Filters.and(Filters.eq("idAdoptante", idAdoptante), Filters.ne("eliminado", true)));
     }
 
     @Override
