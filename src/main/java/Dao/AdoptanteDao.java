@@ -2,7 +2,6 @@ package Dao;
 
 import Idao.IAdoptanteDao;
 import Models.Adoptante;
-import Models.Direccion;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
@@ -24,16 +23,12 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
 
     @Override
     protected Document aDocumento(Adoptante a) {
-        Direccion dir = a.getDireccion();
-        Document docDireccion = new Document("calle", dir.getCalle())   // subdocumento EMBEBIDO
-                .append("ciudad", dir.getCiudad())
-                .append("codigoPostal", dir.getCodigoPostal());
 
         return new Document("_id", a.getDni())
                 .append("nombre", a.getNombre())
                 .append("apellidos", a.getApellidos())
                 .append("telefono", a.getTelefono())
-                .append("direccion", docDireccion)
+                .append("direccion", a.getDireccion())
                 .append("email", a.getEmail())
                 .append("fechaRegistro", a.getFechaRegistro())
                 .append("preferencias", a.getPreferencias())          // array de String
@@ -50,12 +45,7 @@ public class AdoptanteDao extends Dao<Adoptante, String> implements IAdoptanteDa
         a.setEmail(d.getString("email"));
         a.setFechaRegistro(d.getDate("fechaRegistro"));
         a.setEliminado(d.getBoolean("eliminado", false));
-
-        Document dir = d.get("direccion", Document.class);
-        if (dir != null) {
-            a.setDireccion(new Direccion(dir.getString("calle"), dir.getString("ciudad"),
-                    dir.getString("codigoPostal")));
-        }
+        a.setDireccion(d.getString("direccion"));
         a.setPreferencias(d.getList("preferencias", String.class, new ArrayList<>()));
         return a;
     }

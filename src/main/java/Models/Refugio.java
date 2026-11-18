@@ -6,14 +6,14 @@ public class Refugio {
     private String nombre;           // razón social
     private String cif;
     private Date fechaApertura;    // aaaa-mm-dd
-    private Direccion direccion;     // documento embebido
+    private String direccion;     // documento embebido
     private String telefono;
     private String email;
 
     public Refugio() {
     }
 
-    public Refugio(String nombre, String cif, Date fechaApertura, Direccion direccion,
+    public Refugio(String nombre, String cif, Date fechaApertura, String direccion,
                    String telefono, String email) {
         this.nombre = nombre;
         this.cif = cif;
@@ -47,11 +47,11 @@ public class Refugio {
         this.fechaApertura = fechaApertura;
     }
 
-    public Direccion getDireccion() {
+    public String getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(Direccion direccion) {
+    public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 

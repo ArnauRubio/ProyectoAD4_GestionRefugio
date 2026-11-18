@@ -1,7 +1,6 @@
 package Dao;
 
 import Idao.IRefugioDao;
-import Models.Direccion;
 import Models.Refugio;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
@@ -28,24 +27,17 @@ public class RefugioDao implements IRefugioDao {
         r.setFechaApertura(d.getDate("fechaApertura"));
         r.setTelefono(d.getString("telefono"));
         r.setEmail(d.getString("email"));
-        Document dir = d.get("direccion", Document.class);
-        if (dir != null) {
-            r.setDireccion(new Direccion(dir.getString("calle"), dir.getString("ciudad"),
-                    dir.getString("codigoPostal")));
-        }
+        r.setDireccion( d.getString("direccion"));
         return r;
     }
 
     @Override
     public void guardar(Refugio r) {
-        Document dir = new Document("calle", r.getDireccion().getCalle())
-                .append("ciudad", r.getDireccion().getCiudad())
-                .append("codigoPostal", r.getDireccion().getCodigoPostal());
         Document d = new Document("_id", ID_REFUGIO)
                 .append("nombre", r.getNombre())
                 .append("cif", r.getCif())
                 .append("fechaApertura", r.getFechaApertura())
-                .append("direccion", dir)
+                .append("direccion", r.getDireccion())
                 .append("telefono", r.getTelefono())
                 .append("email", r.getEmail());
         // upsert(true): si no existe lo inserta, si existe lo reemplaza
