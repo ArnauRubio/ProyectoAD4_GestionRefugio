@@ -6,30 +6,23 @@ import java.util.Date;
 import java.util.List;
 
 public class Animal {
-    // Estados posibles
-    public static final String DISPONIBLE = "disponible";
-    public static final String RESERVADO = "reservado";
-    public static final String ADOPTADO = "adoptado";
-    public static final String EN_TRATAMIENTO = "en tratamiento";
-
     private int id;                 // se guarda como _id
     private String nombre;
     private String especie;
     private String raza;
     private int edad;
-    private String sexo;
+    private Sexo sexo;
     private String descripcion;
     private Date fechaIngreso;    // aaaa-mm-dd
-    private String estado;
+    private EstadoAnimal estado;
     private List<RegistroMedico> historialMedico = new ArrayList<>();
-    private boolean eliminado;      // borrado lógico
+    private boolean eliminado = false;      // borrado lógico
 
     public Animal() {
     }
 
-    public Animal(int id, String nombre, String especie, String raza, int edad, String sexo,
-                  String descripcion, Date fechaIngreso, String estado) {
-        this.id = id;
+    public Animal(String nombre, String especie, String raza, int edad, Sexo sexo,
+                  String descripcion, Date fechaIngreso, EstadoAnimal estado) {
         this.nombre = nombre;
         this.especie = especie;
         this.raza = raza;
@@ -80,11 +73,11 @@ public class Animal {
         this.edad = edad;
     }
 
-    public String getSexo() {
+    public Sexo getSexo() {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
+    public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
 
@@ -104,11 +97,11 @@ public class Animal {
         this.fechaIngreso = fechaIngreso;
     }
 
-    public String getEstado() {
+    public EstadoAnimal getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoAnimal estado) {
         this.estado = estado;
     }
 

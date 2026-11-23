@@ -14,15 +14,14 @@ public class Adoptante {
     private String direccion;     // documento embebido
     private String email;
     private Date fechaRegistro;    // aaaa-mm-dd
-    private List<String> preferencias = new ArrayList<>();  // array de textos
+    private String preferencias;  // array de textos
     private boolean eliminado;
 
     public Adoptante() {
     }
 
-    public Adoptante(int id, String dni, String nombre, String apellidos, String telefono,
-                     String direccion, String email, Date fechaRegistro) {
-        this.id = id;
+    public Adoptante(String dni, String nombre, String apellidos, String telefono,
+                     String direccion, String email, Date fechaRegistro, String preferencias) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -30,6 +29,7 @@ public class Adoptante {
         this.direccion = direccion;
         this.email = email;
         this.fechaRegistro = fechaRegistro;
+        this.preferencias = preferencias;
     }
 
     public int getId() {
@@ -96,11 +96,11 @@ public class Adoptante {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public List<String> getPreferencias() {
+    public String getPreferencias() {
         return preferencias;
     }
 
-    public void setPreferencias(List<String> preferencias) {
+    public void setPreferencias(String preferencias) {
         this.preferencias = preferencias;
     }
 
