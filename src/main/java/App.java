@@ -194,8 +194,9 @@ public class App {
         Animal animal = new Animal(nombre, especie, raza, edad, sexo, descripcion, fechaIngreso, estado);
         animales.add(animal);
         all_animales.add(animal);
-
         // BD
+        animalDao.insertar(animal);
+        System.out.println("✓ Animal dado de alta con id " + animal.getId());
     }
 
     /**
@@ -229,6 +230,8 @@ public class App {
         animales.remove(aEliminar);
 
         // BD
+        animalDao.eliminar(aEliminar.getId());
+        System.out.println("✓ Animal borrado.");
     }
 
     /**
@@ -240,7 +243,7 @@ public class App {
         System.out.println("------");
         System.out.println("--- Editar animal ---");
 
-        // Se muestra lista de piezas y eligen una
+        // Se muestra lista de animales y eligen uno
         mostrarLista(animales);
 
         System.out.print("--> Editar: ");
@@ -316,6 +319,8 @@ public class App {
         animal.setEstado(estado);
 
         // BD
+        animalDao.actualizar(animal);
+        System.out.println("✓ Animal modificado.");
     }
 
     /**
@@ -446,25 +451,25 @@ public class App {
 
             switch (opcion) {
                 case 1:
-                    altaAnimal();
+                    altaAdoptante();
                     break;
                 case 2:
-                    bajaAnimal();
+                    bajaAdoptante();
                     break;
                 case 3:
-                    editarAnimal();
+                    editarAdoptante();
                     break;
                 case 4:
-                    mostrarLista(animales);
+                    mostrarLista(adoptantes);
                     break;
                 case 5:
-                    buscarAnimalPorNombre();
+                    buscarAdoptantePorNombre();
                     break;
                 case 6:
-                    buscarAnimalPorEspecie();
+                    //buscarAdoptantePorApellidos();
                     break;
                 case 7:
-                    buscarAnimalPorRaza();
+                    //buscarAnimalPorDni();
                     break;
                 case 8:
                     System.out.println("*Volviendo al menú principal");
@@ -506,6 +511,8 @@ public class App {
         all_adoptantes.add(adoptante);
 
         // BD
+        adoptanteDao.insertar(adoptante);
+        System.out.println("✓ Adoptante registrado.");
     }
 
     /**
@@ -539,6 +546,8 @@ public class App {
         adoptantes.remove(aEliminar);
 
         // BD
+        adoptanteDao.eliminar(aEliminar.getId());
+        System.out.println("✓ Adoptante borrado.");
     }
 
     /**
@@ -598,6 +607,8 @@ public class App {
         adopt.setPreferencias(pref);
 
         // BD
+        adoptanteDao.actualizar(adopt);
+        System.out.println("✓ Adoptante modificado.");
     }
 
     /**
