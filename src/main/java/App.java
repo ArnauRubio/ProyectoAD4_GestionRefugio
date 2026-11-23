@@ -75,7 +75,7 @@ public class App {
     /**
      * Muestra las opciones para administrar piezas.
      */
-    public static void menuAnimales() {
+    public static void menuAnimales() throws IOException {
         int opcion = -1;
         do {
             System.out.println("------");
@@ -101,7 +101,7 @@ public class App {
 
             switch (opcion) {
                 case 1:
-                    crearPieza();
+                    altaAnimal();
                     break;
                 case 2:
                     editarPieza();
@@ -167,8 +167,7 @@ public class App {
         String descripcion = br.readLine();
 
         System.out.print("Fecha ingreso (yyyy-mm-dd): ");
-        LocalDate fechaIngreso = LocalDate.parse(br.readLine());
-
+        Date fechaIngreso = new Date(br.readLine());
 
         System.out.print("Estado (Disponible | Reservado | Adoptado): ");
         EstadoAdopcion estado;
@@ -183,11 +182,11 @@ public class App {
             return;
         }
 
-        Animal animal = new Animal(1, nombre, especie, raza, edad, sexo, descripcion, fechaIngreso, estado);
+        Animal animal = new Animal(1, nombre, especie, raza, edad, sexo.toString(), descripcion, fechaIngreso, estado.toString());
 
         //Dao
-        Pieza pieza = new Pieza(codigo, nombre, precio, descripcion);
-        piezas.add(pieza);
-        piezaDao.create(pieza);
+        animalDao.insertar(animal);
+        System.out.println("✓ Animal dado de alta con id " + animal.getId());
+
     }
 }

@@ -70,7 +70,8 @@ public class GestionDao implements IGestionDao {
         baseDatos.getCollection("adoptantes").createIndex(Indexes.ascending("apellidos", "nombre"));
         baseDatos.getCollection("adoptantes").createIndex(Indexes.ascending("email"), new IndexOptions().unique(true));
         baseDatos.getCollection("adopciones").createIndex(Indexes.ascending("idAnimal"));
-        baseDatos.getCollection("adopciones").createIndex(Indexes.ascending("idAdoptante"));        baseDatos.getCollection("adopciones").createIndex(Indexes.descending("fechaSolicitud"));
+        baseDatos.getCollection("adopciones").createIndex(Indexes.ascending("idAdoptante"));
+        baseDatos.getCollection("adopciones").createIndex(Indexes.descending("fechaSolicitud"));
     }
 
     /**
