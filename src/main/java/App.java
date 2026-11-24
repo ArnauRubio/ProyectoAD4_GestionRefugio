@@ -1,6 +1,7 @@
 import Dao.AdopcionDao;
 import Dao.AdoptanteDao;
 import Dao.AnimalDao;
+import Dao.RefugioDao;
 import Models.*;
 
 import java.io.BufferedReader;
@@ -14,6 +15,8 @@ public class App {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+    static Refugio refugio = new Refugio();
+    static RefugioDao refugioDao = new RefugioDao();
     // Listas con todos los objetos
     static List<Animal> all_animales = new ArrayList<>();
     static List<Adoptante> all_adoptantes = new ArrayList<>();
@@ -62,12 +65,12 @@ public class App {
                     menuAdopciones();
                     break;
                 case 4:
-                    //menuGestiones();
+                    menuRefugio();
                     break;
                 case 5:
                     break;
                 default:
-                    System.out.println("Selecciona una opción válida");
+                    System.out.println("Selecciona una opción válida entre el 1 y 5");
             }
         } while (opcion != 5);
     }
@@ -511,7 +514,7 @@ public class App {
 
         // BD
         adoptanteDao.insertar(adoptante);
-        System.out.println("✓ Animal dado de alta con id " + adoptante.getId());
+        System.out.println("✓ Adoptante dado de alta con id " + adoptante.getId());
     }
 
     /**
@@ -545,6 +548,8 @@ public class App {
         adoptantes.remove(aEliminar);
 
         // BD
+        adoptanteDao.eliminar(aEliminar.getId());
+        System.out.println("✓ Adoptante borrado.");
     }
 
     /**
@@ -1010,6 +1015,116 @@ public class App {
                 System.out.println("----------");
             }
         }
+    }
+
+
+    public static void menuRefugio() throws IOException {
+        int opcion = -1;
+        do {
+            System.out.println("------");
+            System.out.print("=== Menú del Refugio ===\n" +
+                    "\t1)Informacion general\n" +
+                    "\t2) Datos de contacto\n" +
+                    "\t3) Modificar datos\n" +
+                    "\t4) Historial de afiliados\n" +
+                    "\t5) Historial de animales\n" +
+                    "\t6) Historial de adopciones\n" +
+                    "\t7) Volver\n" +
+                    "--> Opción: "
+            );
+            try {
+                opcion = Integer.parseInt(br.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Valor no válido");
+                continue;
+            } catch (IOException e) {
+                System.out.println("Error");
+            }
+
+            switch (opcion) {
+                case 1:
+                    informacionGeneral();
+                    break;
+                case 2:
+                    datosContacto();
+                    break;
+                case 3:
+                    modificarDatos();
+                    break;
+                case 4:
+                    historialAfiliados();
+                    break;
+                case 5:
+                    historialAnimales();
+                    break;
+                case 6:
+                    historialAdopciones();
+                    break;
+                case 7:
+                    System.out.println("*Volviendo al menú principal");
+                    break;
+                default:
+                    System.out.println("Error: Introduce un numero entero del 1 al 7");
+            }
+        } while (opcion != 8);
+    }
+
+    public static void informacionGeneral() throws IOException {
+        System.out.println("---**********************---");
+        System.out.println("--- Bienvenido al Refugio" + refugio.getNombre() + "  ---");
+        System.out.println("En este lugar, abierto en " + refugio.getFechaApertura() + " nos tomamos muy en serio las animaladas, tanto que asi \n" +
+                " que damos la bienvenida con brazos abiertos a todos los animales que te puedas imaginar. \n" +
+                "Desde animales abandonados, exoticos o simplemente que ya no pueden ser cuidados por sus anteriores dueños \n" +
+                "tienen aqui su nuevo y calido hogar. \n" +
+                "Por ello ven a disfrutar de ellos en " + refugio.getDireccion());
+        System.out.println("---**********************---");
+    }
+
+    public static void datosContacto() throws IOException {
+        System.out.println("---**********************---");
+        System.out.println("--- Contactanos por estos medios  ---");
+        System.out.println("Nuestro e-mail: " + refugio.getEmail());
+        System.out.println("Nuestro telefono: " + refugio.getTelefono());
+        System.out.println("Nuestro codigo postal: " + refugio.getCif());
+        System.out.println("---**********************---");
+    }
+
+    public static void modificarDatos() throws IOException {
+        System.out.println("---** Introduce los nuevos datos **---");
+        System.out.println("Nuevo nombe: ");
+        refugio.setNombre(br.readLine());
+        System.out.println("Nuevo CIF: ");
+        refugio.setCif(br.readLine());
+        System.out.println("Nueva direccion: ");
+        refugio.setDireccion(br.readLine());
+        System.out.println("Nuevo Telefono: ");
+        refugio.setTelefono(br.readLine());
+        System.out.println("Nuevo e-mail:");
+        refugio.setEmail(br.readLine());
+
+        refugioDao.guardar(refugio);
+
+        System.out.println("Datos cambiados con exito");
+    }
+
+    public static void historialAfiliados() throws IOException {
+        System.out.println("---** Estos son todos los afiliados que hemos tenido **---");
+        for (Adoptante a : adoptantes) {
+            System.out.println(a.getNombre());
+            System.out.println(a.getApellidos());
+        }
+    }
+
+    public static void historialAnimales() throws IOException {
+        System.out.println("---** Estos son todos los animales que hemos albergado **---");
+        for (Animal a : animales) {
+            System.out.println(a.getNombre());
+            System.out.println(a.getEspecie() + a.getRaza());
+        }
+    }
+
+    public static void historialAdopciones() throws IOException {
+        System.out.println("¡Hemos logrado que " + all_adopciones.size() + " animales encontraran una nueva familia! Y sumando!!");
     }
 
 
