@@ -2,7 +2,9 @@ package Dao;
 
 import Idao.IAnimalDao;
 import Models.Animal;
+import Models.EstadoAnimal;
 import Models.RegistroMedico;
+import Models.Sexo;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -31,12 +33,12 @@ public class AnimalDao extends Dao<Animal, Integer> implements IAnimalDao {
                 .append("especie", a.getEspecie())
                 .append("raza", a.getRaza())
                 .append("edad", a.getEdad())
-                .append("sexo", a.getSexo())
+                .append("sexo", a.getSexo().name())
                 .append("descripcion", a.getDescripcion())
                 .append("fechaIngreso", a.getFechaIngreso())
-                .append("estado", a.getEstado())
+                .append("estado", a.getEstado().name())
                 .append("historialMedico", historial)
-                .append("eliminado", a.isEnRefugio());
+                .append("eliminado", !a.isEnRefugio());
     }
 
     @Override
@@ -47,11 +49,11 @@ public class AnimalDao extends Dao<Animal, Integer> implements IAnimalDao {
         a.setEspecie(d.getString("especie"));
         a.setRaza(d.getString("raza"));
         a.setEdad(leerEntero(d, "edad"));
-        a.setSexo(d.getString("sexo"));
+        a.setSexo(Sexo.valueOf(d.getString("sexo")));
         a.setDescripcion(d.getString("descripcion"));
         a.setFechaIngreso(d.getDate("fechaIngreso"));
-        a.setEstado(d.getString("estado"));
-        a.setEnRefugio(d.getBoolean("eliminado", false));
+        a.setEstado(EstadoAnimal.valueOf(d.getString("estado")));
+        a.setEnRefugio(!d.getBoolean("eliminado", false));
 
         for (Document h : d.getList("historialMedico", Document.class, new ArrayList<>())) {
             a.getHistorialMedico().add(new RegistroMedico(

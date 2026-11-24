@@ -2,6 +2,7 @@ package Dao;
 
 import Idao.IAdopcionDao;
 import Models.Adopcion;
+import Models.EstadoAdopcion;
 import Models.Seguimiento;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
@@ -25,30 +26,35 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
             seguimientos.add(new Document("fecha", s.getFecha()).append("comentario", s.getComentario()));
         }
         return new Document("_id", a.getId())
-                .append("idAnimal", a.getIdAnimal())            // REFERENCIA a animales
-                .append("idAdoptante", a.getIdAdoptante())    // REFERENCIA a adoptantes
+                .append("idAnimal", a.getAnimal().getId())            // REFERENCIA a animales
+                .append("idAdoptante", a.getAdoptante().getId())    // REFERENCIA a adoptantes
                 .append("fechaSolicitud", a.getFechaSolicitud())
                 .append("fechaResolucion", a.getFechaResolucion())
-                .append("estado", a.getEstado())
+                .append("estado", a.getEstado().name())
                 .append("observaciones", a.getObservaciones())
                 .append("seguimiento", seguimientos)            // EMBEBIDO
-                .append("eliminado", a.isEnRefugio());
+                .append("eliminado", !a.isEnRefugio());
     }
+
+    private final AnimalDao animalDao = new AnimalDao();
+    private final AdoptanteDao adoptanteDao = new AdoptanteDao();
 
     @Override
     protected Adopcion aObjeto(Document d) {
         Adopcion a = new Adopcion();
         a.setId(leerEntero(d, "_id"));
-        a.setIdAnimal(leerEntero(d, "idAnimal"));
-        a.setIdAdoptante(leerEntero(d, "idAdoptante"));
+        a.setAnimal(animalDao.buscarPorId(leerEntero(d, "idAnimal")));
+        a.setAdoptante(adoptanteDao.buscarPorId(leerEntero(d, "idAdoptante")));
         a.setFechaSolicitud(d.getDate("fechaSolicitud"));
         a.setFechaResolucion(d.getDate("fechaResolucion"));
-        a.setEstado(d.getString("estado"));
+        a.setEstado(EstadoAdopcion.valueOf(d.getString("estado")));
         a.setObservaciones(d.getString("observaciones"));
-        a.setEnRefugio(d.getBoolean("eliminado", false));
+        a.setEnRefugio(!d.getBoolean("eliminado", false));
 
         for (Document s : d.getList("seguimiento", Document.class, new ArrayList<>())) {
-            a.getSeguimiento().add(new Seguimiento(s.getDate("fecha"), s.getString("comentario")));
+            a.getSeguimiento().add(
+                    new Seguimiento(s.getDate("fecha"), s.getString("comentario"))
+            );
         }
         return a;
     }

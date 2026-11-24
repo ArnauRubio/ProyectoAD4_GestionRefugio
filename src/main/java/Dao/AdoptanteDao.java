@@ -21,15 +21,15 @@ public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteD
     protected Document aDocumento(Adoptante a) {
 
         return new Document("_id", a.getId())
-                .append("_id", a.getDni())
+                .append("dni", a.getDni())
                 .append("nombre", a.getNombre())
                 .append("apellidos", a.getApellidos())
                 .append("telefono", a.getTelefono())
                 .append("direccion", a.getDireccion())
                 .append("email", a.getEmail())
                 .append("fechaRegistro", a.getFechaRegistro())
-                .append("preferencias", a.getPreferencias())          // array de String
-                .append("eliminado", a.isEnRefugio());
+                .append("preferencias", a.getPreferencias())
+                .append("eliminado", !a.isEnRefugio());
     }
 
     @Override
@@ -40,11 +40,11 @@ public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteD
         a.setNombre(d.getString("nombre"));
         a.setApellidos(d.getString("apellidos"));
         a.setTelefono(d.getString("telefono"));
+        a.setDireccion(d.getString("direccion"));
         a.setEmail(d.getString("email"));
         a.setFechaRegistro(d.getDate("fechaRegistro"));
-        a.setEnRefugio(d.getBoolean("eliminado", false));
-        a.setDireccion(d.getString("direccion"));
-        a.setPreferencias(d.getList("preferencias", String.class, new ArrayList<>()));
+        a.setPreferencias(d.getString("preferencias"));
+        a.setEnRefugio(!d.getBoolean("eliminado", false));
         return a;
     }
 
@@ -76,7 +76,7 @@ public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteD
 
     @Override
     public Adoptante buscarPorId(Integer id) {
-        return null;
+        return super.buscarPorId(id);
     }
 
     @Override

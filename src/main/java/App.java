@@ -76,7 +76,27 @@ public class App {
     }
 
     public static void cargarDatosIniciales() {
+        all_animales.clear();
+        all_adoptantes.clear();
+        all_adopciones.clear();
+        animales.clear();
+        adoptantes.clear();
+        adopciones.clear();
 
+        all_animales.addAll(animalDao.listarTodos());
+        animales.addAll(all_animales);
+
+        all_adoptantes.addAll(adoptanteDao.listarTodos());
+        adoptantes.addAll(all_adoptantes);
+
+        // Se cargan después de animales y adoptantes porque son referencias.
+        all_adopciones.addAll(adopcionDao.listarTodos());
+        adopciones.addAll(all_adopciones);
+
+        Refugio refugioCargado = refugioDao.obtener();
+        if (refugioCargado != null) {
+            refugio = refugioCargado;
+        }
     }
 
 
@@ -163,9 +183,10 @@ public class App {
 
         System.out.print("Sexo (M | H): ");
         Sexo sexo;
-        if (br.readLine().equalsIgnoreCase("M")) {
+        String teclado = br.readLine();
+        if (teclado.equalsIgnoreCase("M")) {
             sexo = Sexo.MACHO;
-        } else if (br.readLine().equalsIgnoreCase("H")) {
+        } else if (teclado.equalsIgnoreCase("H")) {
             sexo = Sexo.HEMBRA;
         } else {
             System.out.println("Elige una de las opciones disponibles");
@@ -175,18 +196,19 @@ public class App {
         System.out.print("Descripción: ");
         String descripcion = br.readLine();
 
-        System.out.print("Fecha ingreso (yyyy-mm-dd): ");
+        System.out.print("Fecha ingreso (dd/mm/yyyy): ");
         Date fechaIngreso = new Date(br.readLine());
 
         System.out.print("Estado (Disponible | Reservado | Adoptado | Tratamiento): ");
         EstadoAnimal estado;
-        if (br.readLine().equalsIgnoreCase("disponible")) {
+        String input = br.readLine();
+        if (input.equalsIgnoreCase("disponible")) {
             estado = EstadoAnimal.DISPONIBLE;
-        } else if (br.readLine().equalsIgnoreCase("reservado")) {
+        } else if (input.equalsIgnoreCase("reservado")) {
             estado = EstadoAnimal.RESERVADO;
-        } else if (br.readLine().equalsIgnoreCase("adoptado")) {
+        } else if (input.equalsIgnoreCase("adoptado")) {
             estado = EstadoAnimal.ADOPTADO;
-        } else if (br.readLine().equalsIgnoreCase("tratamiento")) {
+        } else if (input.equalsIgnoreCase("tratamiento")) {
             estado = EstadoAnimal.EN_TRATAMIENTO;
         } else {
             System.out.println("Elige una de las opciones disponibles.");
@@ -194,8 +216,10 @@ public class App {
         }
 
         Animal animal = new Animal(nombre, especie, raza, edad, sexo, descripcion, fechaIngreso, estado);
+        animal.setId(animalDao.siguienteId());
         animales.add(animal);
         all_animales.add(animal);
+        System.out.println("Animal creado");
         // BD
         animalDao.insertar(animal);
         System.out.println("✓ Animal dado de alta con id " + animal.getId());
@@ -502,13 +526,14 @@ public class App {
         System.out.print("Email: ");
         String email = br.readLine();
 
-        System.out.print("Fecha registro (yyyy-mm-dd): ");
+        System.out.print("Fecha registro (dd/mm/yyyy): ");
         Date fechaRegistro = new Date(br.readLine());
         System.out.print("Preferencia: ");
         String pref = br.readLine();
 
         Adoptante adoptante = new Adoptante(dni, nombre, apellidos, tlf, direccion,
                 email, fechaRegistro, pref);
+        adoptante.setId(adoptanteDao.siguienteId());
         adoptantes.add(adoptante);
         all_adoptantes.add(adoptante);
 
@@ -818,7 +843,7 @@ public class App {
 
         Date fecha;
         try {
-            System.out.print("Fecha (yyyy-mm-dd): ");
+            System.out.print("Fecha (dd/mm/yyyy): ");
             fecha = new Date(br.readLine());
         } catch (IOException e) {
             System.out.println("Fecha no válida");
@@ -829,6 +854,7 @@ public class App {
         String observ = br.readLine();
 
         Adopcion adopcion = new Adopcion(animal, adoptante, fecha, observ);
+        adopcion.setId(adopcionDao.siguienteId());
         adopciones.add(adopcion);
         all_adopciones.add(adopcion);
 
@@ -903,7 +929,7 @@ public class App {
         // Nuevos valores
         Date fechaSolic;
         try {
-            System.out.print("Fecha (yyyy-mm-dd): ");
+            System.out.print("Fecha (dd/mm/yyyy): ");
             fechaSolic = new Date(br.readLine());
         } catch (IOException e) {
             System.out.println("Fecha no válida");
@@ -912,7 +938,7 @@ public class App {
 
         Date fechaResol = null;
         try {
-            System.out.print("Fecha (yyyy-mm-dd): ");
+            System.out.print("Fecha (dd/mm/yyyy): ");
             String input = br.readLine();
             if (!input.isEmpty()) {
                 fechaResol = new Date(input);
@@ -1091,7 +1117,7 @@ public class App {
 
     public static void modificarDatos() throws IOException {
         System.out.println("---** Introduce los nuevos datos **---");
-        System.out.println("Nuevo nombe: ");
+        System.out.println("Nuevo nombre: ");
         refugio.setNombre(br.readLine());
         System.out.println("Nuevo CIF: ");
         refugio.setCif(br.readLine());
