@@ -7,8 +7,8 @@ import java.util.List;
 public class Adopcion {
 
     private int id;                    // se guarda como _id
-    private int idAnimal;              // referencia a animales._id
-    private int idAdoptante;       // referencia a adoptantes._id
+    private Animal animal;              // referencia a animales._id
+    private Adoptante adoptante;       // referencia a adoptantes._id
     private Date fechaSolicitud;     // aaaa-mm-dd
     private Date fechaResolucion;    // puede ser null
     private EstadoAdopcion estado;
@@ -19,9 +19,9 @@ public class Adopcion {
     public Adopcion() {
     }
 
-    public Adopcion(int idAnimal, int idAdoptante, Date fechaSolicitud, String observaciones) {
-        this.idAnimal = idAnimal;
-        this.idAdoptante = idAdoptante;
+    public Adopcion(Animal animal, Adoptante adoptante, Date fechaSolicitud, String observaciones) {
+        this.animal = animal;
+        this.adoptante = adoptante;
         this.fechaSolicitud = fechaSolicitud;
         this.observaciones = observaciones;
         this.estado = EstadoAdopcion.PENDIENTE;
@@ -36,20 +36,20 @@ public class Adopcion {
         this.id = id;
     }
 
-    public int getIdAnimal() {
-        return idAnimal;
+    public Animal getAnimal() {
+        return animal;
     }
 
-    public void setIdAnimal(int idAnimal) {
-        this.idAnimal = idAnimal;
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
     }
 
-    public int getIdAdoptante() {
-        return idAdoptante;
+    public Adoptante getAdoptante() {
+        return adoptante;
     }
 
-    public void setIdAdoptante(int idAdoptante) {
-        this.idAdoptante = idAdoptante;
+    public void setAdoptante(Adoptante adoptante) {
+        this.adoptante = adoptante;
     }
 
     public Date getFechaSolicitud() {
@@ -102,7 +102,7 @@ public class Adopcion {
 
     @Override
     public String toString() {
-        return "[" + id + "] animal: " + idAnimal + " | adoptante: " + idAdoptante
+        return "[" + id + "] animal: " + animal + " | adoptante: " + adoptante
                 + " | solicitud: " + fechaSolicitud
                 + " | resolución: " + (fechaResolucion == null ? "-" : fechaResolucion)
                 + " | estado: " + estado + (enRefugio ? " (ELIMINADA)" : "")

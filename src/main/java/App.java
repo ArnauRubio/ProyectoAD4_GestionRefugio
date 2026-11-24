@@ -480,7 +480,7 @@ public class App {
     }
 
     /**
-     * Pide los datos de un animal nuevo y lo guarda
+     * Pide los datos de un adoptante nuevo y lo guarda
      */
     public static void altaAdoptante() throws IOException {
         System.out.println("------");
@@ -510,10 +510,12 @@ public class App {
         all_adoptantes.add(adoptante);
 
         // BD
+        adoptanteDao.insertar(adoptante);
+        System.out.println("✓ Animal dado de alta con id " + adoptante.getId());
     }
 
     /**
-     * Elimina el animal seleccionado.
+     * Elimina el adoptante seleccionado.
      */
     public static void bajaAdoptante() {
         System.out.println("------");
@@ -602,6 +604,8 @@ public class App {
         adopt.setPreferencias(pref);
 
         // BD
+        adoptanteDao.actualizar(adopt);
+        System.out.println("✓ Adoptante modificado.");
     }
 
     /**
@@ -634,7 +638,7 @@ public class App {
             }
         }
         if (!encontrado) {
-            System.out.println("No se ha podido encontrar el animal");
+            System.out.println("No se ha podido encontrar el adoptante");
         }
     }
 
@@ -668,7 +672,7 @@ public class App {
             }
         }
         if (!encontrado) {
-            System.out.println("No se ha podido encontrar el animal");
+            System.out.println("No se ha podido encontrar el adoptante");
         }
     }
 
@@ -702,7 +706,7 @@ public class App {
             }
         }
         if (!encontrado) {
-            System.out.println("No se ha podido encontrar el animal");
+            System.out.println("No se ha podido encontrar el adoptante");
         }
     }
 
@@ -717,7 +721,7 @@ public class App {
                     "\t1) Alta de adopción\n" +
                     "\t2) Baja de adopción\n" +
                     "\t3) Modificar adopción\n" +
-                    "\t4) Listado de adoptantes\n" +
+                    "\t4) Listado de adopciones\n" +
                     "\t5) Búsqueda por animal\n" +
                     "\t6) Búsqueda por adoptante\n" +
                     "\t7) Volver\n" +
@@ -761,7 +765,7 @@ public class App {
     }
 
     /**
-     * Pide los datos de un animal nuevo y lo guarda
+     * Pide los datos de una adopcion nueva y lo guarda
      */
     public static void altaAdopcion() throws IOException {
         System.out.println("------");
@@ -819,17 +823,17 @@ public class App {
         System.out.print("Observaciones: ");
         String observ = br.readLine();
 
-        Adopcion adopcion = new Adopcion(animal.getId(), adoptante.getId(), fecha, observ);
+        Adopcion adopcion = new Adopcion(animal, adoptante, fecha, observ);
         adopciones.add(adopcion);
         all_adopciones.add(adopcion);
 
         // BD
-        adoptanteDao.insertar(adoptante);
-        System.out.println("✓ Adoptante registrado.");
+        adopcionDao.insertar(adopcion);
+        System.out.println("✓ Adopcion registrada.");
     }
 
     /**
-     * Elimina el animal seleccionado.
+     * Elimina la adopcion seleccionada.
      */
     public static void bajaAdopcion() {
         System.out.println("------");
@@ -859,8 +863,8 @@ public class App {
         adopciones.remove(aEliminar);
 
         // BD
-        adoptanteDao.eliminar(aEliminar.getId());
-        System.out.println("✓ Adoptante borrado.");
+        adopcionDao.eliminar(aEliminar.getId());
+        System.out.println("✓ Adopcion borrada.");
     }
 
     /**
@@ -939,42 +943,76 @@ public class App {
 
         // BD
         adopcionDao.actualizar(adopc);
-        System.out.println("✓ Adopcion modificado.");
+        System.out.println("✓ Adopcion modificada.");
     }
 
     /**
-     * Busca y muestra adoptante por nombre.
+     * Busca y muestra adopcion por animal.
      *
      * @throws IOException si ocurre un error al leer la entrada
      */
-    public static void buscarAdoptantePorNombre() throws IOException {
+    public static void buscarAdopcionPorAnimal() throws IOException {
         System.out.println("------");
-        System.out.println("--- Buscar adoptante por nombre ---");
+        System.out.println("--- Buscar adopcion por animal ---");
 
-        System.out.print("Nombre: ");
-        String nombre = br.readLine();
+        System.out.print("Nombre animal: ");
+        String animalNombre = br.readLine();
 
-        boolean encontrado = false;
-        for (Adoptante adoptante : adoptantes) {
-            if (adoptante.getNombre().equalsIgnoreCase(nombre)) {
-                System.out.println("- Adoptante encontrado -");
-                System.out.println("--> DNI: " + adoptante.getDni());
-                System.out.println("--> Nombre: " + adoptante.getNombre());
-                System.out.println("--> Apellidos: " + adoptante.getApellidos());
-                System.out.println("--> Tlf: " + adoptante.getTelefono());
-                System.out.println("--> Dirección: " + adoptante.getDireccion());
-                System.out.println("--> Email: " + adoptante.getEmail());
-                System.out.println("--> Registro: " + adoptante.getFechaRegistro());
-                System.out.println("--> Preferencias: " + adoptante.getPreferencias());
-                System.out.println("--> En refugio: " + adoptante.isEnRefugio());
-
-                encontrado = true;
+        boolean encontrada = false;
+        List<Adopcion> encontradas = new ArrayList<>();
+        for (Adopcion adopc : adopciones) {
+            if (adopc.getAnimal().getNombre().equalsIgnoreCase(animalNombre)) {
+                encontradas.add(adopc);
+                encontrada = true;
             }
         }
-        if (!encontrado) {
-            System.out.println("No se ha podido encontrar el animal");
+        if (!encontrada) {
+            System.out.println("No se ha podido encontrar la adopción");
+        } else {
+            System.out.println("- Adopcion(es) encontrada(s) -");
+            for (Adopcion adopcion : encontradas) {
+                System.out.println("--> Animal: " + adopcion.getAnimal().getNombre());
+                System.out.println("--> Adoptante: " + adopcion.getAdoptante().getNombre());
+                System.out.println("--> Estado: " + adopcion.getEstado());
+                System.out.println("----------");
+            }
         }
     }
+
+    /**
+     * Busca y muestra adopcion por adoptante.
+     *
+     * @throws IOException si ocurre un error al leer la entrada
+     */
+    public static void buscarAdopcionPorAdoptante() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Buscar adopcion por adoptante ---");
+
+        System.out.print("Nombre adoptante: ");
+        String adoptanteNombre = br.readLine();
+
+        boolean encontrada = false;
+        List<Adopcion> encontradas = new ArrayList<>();
+        for (Adopcion adopc : adopciones) {
+            if (adopc.getAdoptante().getNombre().equalsIgnoreCase(adoptanteNombre)) {
+                encontradas.add(adopc);
+                encontrada = true;
+            }
+        }
+        if (!encontrada) {
+            System.out.println("No se ha podido encontrar la adopción");
+        } else {
+            System.out.println("- Adopcion(es) encontrada(s) -");
+            for (Adopcion adopcion : encontradas) {
+                System.out.println("--> Animal: " + adopcion.getAnimal().getNombre());
+                System.out.println("--> Adoptante: " + adopcion.getAdoptante().getNombre());
+                System.out.println("--> Estado: " + adopcion.getEstado());
+                System.out.println("----------");
+            }
+        }
+    }
+
+
     // MÉTODOS COMUNES
 
     /**
