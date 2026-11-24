@@ -1,9 +1,6 @@
 package Models;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Adoptante {
     private int id;
@@ -15,7 +12,7 @@ public class Adoptante {
     private String email;
     private Date fechaRegistro;    // aaaa-mm-dd
     private String preferencias;  // array de textos
-    private boolean eliminado;
+    private boolean enRefugio;
 
     public Adoptante() {
     }
@@ -30,6 +27,7 @@ public class Adoptante {
         this.email = email;
         this.fechaRegistro = fechaRegistro;
         this.preferencias = preferencias;
+        this.enRefugio = true;
     }
 
     public int getId() {
@@ -104,18 +102,18 @@ public class Adoptante {
         this.preferencias = preferencias;
     }
 
-    public boolean isEliminado() {
-        return eliminado;
+    public boolean isEnRefugio() {
+        return enRefugio;
     }
 
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEnRefugio(boolean enRefugio) {
+        this.enRefugio = enRefugio;
     }
 
     @Override
     public String toString() {
         return "[" + id + "] " + dni + " | " + nombre + " " + apellidos + " | tel: " + telefono + " | " + email
-                + (eliminado ? " (ELIMINADO)" : "")
+                + (enRefugio ? " (ELIMINADO)" : "")
                 + "\n      Dirección: " + direccion
                 + "\n      Registro: " + fechaRegistro + " | Preferencias: " + preferencias;
     }

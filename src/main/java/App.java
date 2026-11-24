@@ -6,7 +6,6 @@ import Models.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +59,7 @@ public class App {
                     menuAdoptantes();
                     break;
                 case 3:
-                    //menuProyectos();
+                    menuAdopciones();
                     break;
                 case 4:
                     //menuGestiones();
@@ -131,7 +130,7 @@ public class App {
                     System.out.println("*Volviendo al menú principal");
                     break;
                 default:
-                    System.out.println("Error: Introduce un numero entero del 1 al 7");
+                    System.out.println("Error: Introduce un numero entero del 1 al 8");
             }
         } while (opcion != 8);
     }
@@ -226,7 +225,7 @@ public class App {
         }
 
         Animal aEliminar = animales.get(opcion);
-        aEliminar.setEliminado(true);
+        aEliminar.setEnRefugio(false);
         animales.remove(aEliminar);
 
         // BD
@@ -346,7 +345,7 @@ public class App {
                 System.out.println("--> Sexo: " + animal.getSexo());
                 System.out.println("--> Descripcion: " + animal.getDescripcion());
                 System.out.println("--> Ingreso: " + animal.getFechaIngreso());
-                System.out.println("--> En refugio: " + animal.isEliminado());
+                System.out.println("--> En refugio: " + animal.isEnRefugio());
 
                 encontrado = true;
             }
@@ -379,7 +378,7 @@ public class App {
                 System.out.println("--> Sexo: " + animal.getSexo());
                 System.out.println("--> Descripcion: " + animal.getDescripcion());
                 System.out.println("--> Ingreso: " + animal.getFechaIngreso());
-                System.out.println("--> En refugio: " + animal.isEliminado());
+                System.out.println("--> En refugio: " + animal.isEnRefugio());
 
                 encontrado = true;
             }
@@ -412,7 +411,7 @@ public class App {
                 System.out.println("--> Sexo: " + animal.getSexo());
                 System.out.println("--> Descripcion: " + animal.getDescripcion());
                 System.out.println("--> Ingreso: " + animal.getFechaIngreso());
-                System.out.println("--> En refugio: " + animal.isEliminado());
+                System.out.println("--> En refugio: " + animal.isEnRefugio());
 
                 encontrado = true;
             }
@@ -466,16 +465,16 @@ public class App {
                     buscarAdoptantePorNombre();
                     break;
                 case 6:
-                    //buscarAdoptantePorApellidos();
+                    buscarAdoptantePorApellidos();
                     break;
                 case 7:
-                    //buscarAnimalPorDni();
+                    buscarAdoptantePorDni();
                     break;
                 case 8:
                     System.out.println("*Volviendo al menú principal");
                     break;
                 default:
-                    System.out.println("Error: Introduce un numero entero del 1 al 7");
+                    System.out.println("Error: Introduce un numero entero del 1 al 8");
             }
         } while (opcion != 8);
     }
@@ -511,8 +510,6 @@ public class App {
         all_adoptantes.add(adoptante);
 
         // BD
-        adoptanteDao.insertar(adoptante);
-        System.out.println("✓ Adoptante registrado.");
     }
 
     /**
@@ -542,12 +539,10 @@ public class App {
         }
 
         Adoptante aEliminar = adoptantes.get(opcion);
-        aEliminar.setEliminado(true);
+        aEliminar.setEnRefugio(true);
         adoptantes.remove(aEliminar);
 
         // BD
-        adoptanteDao.eliminar(aEliminar.getId());
-        System.out.println("✓ Adoptante borrado.");
     }
 
     /**
@@ -607,8 +602,6 @@ public class App {
         adopt.setPreferencias(pref);
 
         // BD
-        adoptanteDao.actualizar(adopt);
-        System.out.println("✓ Adoptante modificado.");
     }
 
     /**
@@ -635,7 +628,7 @@ public class App {
                 System.out.println("--> Email: " + adoptante.getEmail());
                 System.out.println("--> Registro: " + adoptante.getFechaRegistro());
                 System.out.println("--> Preferencias: " + adoptante.getPreferencias());
-                System.out.println("--> En refugio: " + adoptante.isEliminado());
+                System.out.println("--> En refugio: " + adoptante.isEnRefugio());
 
                 encontrado = true;
             }
@@ -645,7 +638,343 @@ public class App {
         }
     }
 
+    /**
+     * Busca y muestra adoptante por apellidos.
+     *
+     * @throws IOException si ocurre un error al leer la entrada
+     */
+    public static void buscarAdoptantePorApellidos() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Buscar adoptante por apellidos ---");
 
+        System.out.print("Apellidos: ");
+        String apellidos = br.readLine();
+
+        boolean encontrado = false;
+        for (Adoptante adoptante : adoptantes) {
+            if (adoptante.getApellidos().equalsIgnoreCase(apellidos)) {
+                System.out.println("- Adoptante encontrado -");
+                System.out.println("--> DNI: " + adoptante.getDni());
+                System.out.println("--> Nombre: " + adoptante.getNombre());
+                System.out.println("--> Apellidos: " + adoptante.getApellidos());
+                System.out.println("--> Tlf: " + adoptante.getTelefono());
+                System.out.println("--> Dirección: " + adoptante.getDireccion());
+                System.out.println("--> Email: " + adoptante.getEmail());
+                System.out.println("--> Registro: " + adoptante.getFechaRegistro());
+                System.out.println("--> Preferencias: " + adoptante.getPreferencias());
+                System.out.println("--> En refugio: " + adoptante.isEnRefugio());
+
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("No se ha podido encontrar el animal");
+        }
+    }
+
+    /**
+     * Busca y muestra adoptante por DNI.
+     *
+     * @throws IOException si ocurre un error al leer la entrada
+     */
+    public static void buscarAdoptantePorDni() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Buscar adoptante por DNI ---");
+
+        System.out.print("DNI: ");
+        String dni = br.readLine();
+
+        boolean encontrado = false;
+        for (Adoptante adoptante : adoptantes) {
+            if (adoptante.getDni().equalsIgnoreCase(dni)) {
+                System.out.println("- Adoptante encontrado -");
+                System.out.println("--> DNI: " + adoptante.getDni());
+                System.out.println("--> Nombre: " + adoptante.getNombre());
+                System.out.println("--> Apellidos: " + adoptante.getApellidos());
+                System.out.println("--> Tlf: " + adoptante.getTelefono());
+                System.out.println("--> Dirección: " + adoptante.getDireccion());
+                System.out.println("--> Email: " + adoptante.getEmail());
+                System.out.println("--> Registro: " + adoptante.getFechaRegistro());
+                System.out.println("--> Preferencias: " + adoptante.getPreferencias());
+                System.out.println("--> En refugio: " + adoptante.isEnRefugio());
+
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("No se ha podido encontrar el animal");
+        }
+    }
+
+    /**
+     * Muestra las opciones para administrar adopciones.
+     */
+    public static void menuAdopciones() throws IOException {
+        int opcion = -1;
+        do {
+            System.out.println("------");
+            System.out.print("=== Menú adopciones ===\n" +
+                    "\t1) Alta de adopción\n" +
+                    "\t2) Baja de adopción\n" +
+                    "\t3) Modificar adopción\n" +
+                    "\t4) Listado de adoptantes\n" +
+                    "\t5) Búsqueda por animal\n" +
+                    "\t6) Búsqueda por adoptante\n" +
+                    "\t7) Volver\n" +
+                    "--> Opción: "
+            );
+            try {
+                opcion = Integer.parseInt(br.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Valor no válido");
+                continue;
+            } catch (IOException e) {
+                System.out.println("Error");
+            }
+
+            switch (opcion) {
+                case 1:
+                    altaAdopcion();
+                    break;
+                case 2:
+                    bajaAdopcion();
+                    break;
+                case 3:
+                    editarAdopcion();
+                    break;
+                case 4:
+                    mostrarLista(adopciones);
+                    break;
+                case 5:
+                    buscarAdopcionPorAnimal();
+                    break;
+                case 6:
+                    buscarAdopcionPorAdoptante();
+                    break;
+                case 7:
+                    System.out.println("*Volviendo al menú principal");
+                    break;
+                default:
+                    System.out.println("Error: Introduce un numero entero del 1 al 7");
+            }
+        } while (opcion != 7);
+    }
+
+    /**
+     * Pide los datos de un animal nuevo y lo guarda
+     */
+    public static void altaAdopcion() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Alta adopción ---");
+
+        System.out.println("Elige qué adoptante quiere tramitar adopción:");
+        mostrarLista(adoptantes);
+        System.out.print("--> Opción: ");
+
+        int opcion = -1;
+        try {
+            opcion = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor no válido");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+
+        if (opcion < 0 || opcion >= adoptantes.size()) {
+            System.out.println("Índice no válido");
+            return;
+        }
+        Adoptante adoptante = adoptantes.get(opcion);
+
+        System.out.println("Elige qué animal quiere adoptar:");
+        mostrarLista(animales);
+        System.out.print("--> Opción: ");
+
+        int opc = -1;
+        try {
+            opc = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor no válido");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+
+        if (opc < 0 || opc >= animales.size()) {
+            System.out.println("Índice no válido");
+            return;
+        }
+        Animal animal = animales.get(opc);
+
+        Date fecha;
+        try {
+            System.out.print("Fecha (yyyy-mm-dd): ");
+            fecha = new Date(br.readLine());
+        } catch (IOException e) {
+            System.out.println("Fecha no válida");
+            return;
+        }
+
+        System.out.print("Observaciones: ");
+        String observ = br.readLine();
+
+        Adopcion adopcion = new Adopcion(animal.getId(), adoptante.getId(), fecha, observ);
+        adopciones.add(adopcion);
+        all_adopciones.add(adopcion);
+
+        // BD
+        adoptanteDao.insertar(adoptante);
+        System.out.println("✓ Adoptante registrado.");
+    }
+
+    /**
+     * Elimina el animal seleccionado.
+     */
+    public static void bajaAdopcion() {
+        System.out.println("------");
+        System.out.println("--- Baja de adopcion ---");
+
+        // Se muestra lista de adopciones y eligen uno
+        mostrarLista(adopciones);
+        System.out.print("--> Opción: ");
+
+        int opcion = -1;
+        try {
+            opcion = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor no válido");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+
+        if (opcion < 0 || opcion >= adopciones.size()) {
+            System.out.println("Índice no válido");
+            return;
+        }
+
+        Adopcion aEliminar = adopciones.get(opcion);
+        aEliminar.setEnRefugio(false);
+        adopciones.remove(aEliminar);
+
+        // BD
+        adoptanteDao.eliminar(aEliminar.getId());
+        System.out.println("✓ Adoptante borrado.");
+    }
+
+    /**
+     * Permite cambiar los datos de un adoptante en alta.
+     *
+     * @throws IOException si ocurre un error al leer la entrada
+     */
+    public static void editarAdopcion() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Editar adopción ---");
+
+        // Se muestra lista de adopciones y eligen una
+        mostrarLista(adopciones);
+
+        System.out.print("--> Editar: ");
+        int opcion = -1;
+        try {
+            opcion = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor no válido");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+
+        if (opcion < 0 || opcion >= adopciones.size()) {
+            System.out.println("Índice no válido");
+            return;
+        }
+
+        // Nuevos valores
+        Date fechaSolic;
+        try {
+            System.out.print("Fecha (yyyy-mm-dd): ");
+            fechaSolic = new Date(br.readLine());
+        } catch (IOException e) {
+            System.out.println("Fecha no válida");
+            return;
+        }
+
+        Date fechaResol = null;
+        try {
+            System.out.print("Fecha (yyyy-mm-dd): ");
+            String input = br.readLine();
+            if (!input.isEmpty()) {
+                fechaResol = new Date(input);
+            }
+        } catch (IOException e) {
+            System.out.println("Fecha no válida");
+            return;
+        }
+
+        System.out.print("Observaciones: ");
+        String observ = br.readLine();
+
+        System.out.print("Estado (Pendiente | Aprobada | Rechazada): ");
+        EstadoAdopcion estado;
+        if (br.readLine().equalsIgnoreCase("pendiente")) {
+            estado = EstadoAdopcion.PENDIENTE;
+        } else if (br.readLine().equalsIgnoreCase("aprobada")) {
+            estado = EstadoAdopcion.APROBADA;
+        } else if (br.readLine().equalsIgnoreCase("rechazada")) {
+            estado = EstadoAdopcion.RECHAZADA;
+        } else {
+            System.out.println("Elige una de las opciones disponibles.");
+            return;
+        }
+
+        // Sobreescribir
+        Adopcion adopc = adopciones.get(opcion);
+
+        adopc.setFechaSolicitud(fechaSolic);
+        adopc.setFechaResolucion(fechaResol);
+        adopc.setObservaciones(observ);
+        adopc.setEstado(estado);
+
+        // BD
+        adopcionDao.actualizar(adopc);
+        System.out.println("✓ Adopcion modificado.");
+    }
+
+    /**
+     * Busca y muestra adoptante por nombre.
+     *
+     * @throws IOException si ocurre un error al leer la entrada
+     */
+    public static void buscarAdoptantePorNombre() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Buscar adoptante por nombre ---");
+
+        System.out.print("Nombre: ");
+        String nombre = br.readLine();
+
+        boolean encontrado = false;
+        for (Adoptante adoptante : adoptantes) {
+            if (adoptante.getNombre().equalsIgnoreCase(nombre)) {
+                System.out.println("- Adoptante encontrado -");
+                System.out.println("--> DNI: " + adoptante.getDni());
+                System.out.println("--> Nombre: " + adoptante.getNombre());
+                System.out.println("--> Apellidos: " + adoptante.getApellidos());
+                System.out.println("--> Tlf: " + adoptante.getTelefono());
+                System.out.println("--> Dirección: " + adoptante.getDireccion());
+                System.out.println("--> Email: " + adoptante.getEmail());
+                System.out.println("--> Registro: " + adoptante.getFechaRegistro());
+                System.out.println("--> Preferencias: " + adoptante.getPreferencias());
+                System.out.println("--> En refugio: " + adoptante.isEnRefugio());
+
+                encontrado = true;
+            }
+        }
+        if (!encontrado) {
+            System.out.println("No se ha podido encontrar el animal");
+        }
+    }
     // MÉTODOS COMUNES
 
     /**

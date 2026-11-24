@@ -3,14 +3,9 @@ package Dao;
 import Idao.IAdopcionDao;
 import Models.Adopcion;
 import Models.Seguimiento;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +32,7 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
                 .append("estado", a.getEstado())
                 .append("observaciones", a.getObservaciones())
                 .append("seguimiento", seguimientos)            // EMBEBIDO
-                .append("eliminado", a.isEliminado());
+                .append("eliminado", a.isEnRefugio());
     }
 
     @Override
@@ -50,7 +45,7 @@ public class AdopcionDao extends Dao<Adopcion, Integer> implements IAdopcionDao 
         a.setFechaResolucion(d.getDate("fechaResolucion"));
         a.setEstado(d.getString("estado"));
         a.setObservaciones(d.getString("observaciones"));
-        a.setEliminado(d.getBoolean("eliminado", false));
+        a.setEnRefugio(d.getBoolean("eliminado", false));
 
         for (Document s : d.getList("seguimiento", Document.class, new ArrayList<>())) {
             a.getSeguimiento().add(new Seguimiento(s.getDate("fecha"), s.getString("comentario")));

@@ -4,10 +4,7 @@ import Idao.IAnimalDao;
 import Models.Animal;
 import Models.RegistroMedico;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -39,7 +36,7 @@ public class AnimalDao extends Dao<Animal, Integer> implements IAnimalDao {
                 .append("fechaIngreso", a.getFechaIngreso())
                 .append("estado", a.getEstado())
                 .append("historialMedico", historial)
-                .append("eliminado", a.isEliminado());
+                .append("eliminado", a.isEnRefugio());
     }
 
     @Override
@@ -54,7 +51,7 @@ public class AnimalDao extends Dao<Animal, Integer> implements IAnimalDao {
         a.setDescripcion(d.getString("descripcion"));
         a.setFechaIngreso(d.getDate("fechaIngreso"));
         a.setEstado(d.getString("estado"));
-        a.setEliminado(d.getBoolean("eliminado", false));
+        a.setEnRefugio(d.getBoolean("eliminado", false));
 
         for (Document h : d.getList("historialMedico", Document.class, new ArrayList<>())) {
             a.getHistorialMedico().add(new RegistroMedico(

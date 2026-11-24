@@ -2,17 +2,13 @@ package Dao;
 
 import Idao.IAdoptanteDao;
 import Models.Adoptante;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteDao {
     public AdoptanteDao() {
@@ -33,7 +29,7 @@ public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteD
                 .append("email", a.getEmail())
                 .append("fechaRegistro", a.getFechaRegistro())
                 .append("preferencias", a.getPreferencias())          // array de String
-                .append("eliminado", a.isEliminado());
+                .append("eliminado", a.isEnRefugio());
     }
 
     @Override
@@ -46,7 +42,7 @@ public class AdoptanteDao extends Dao<Adoptante, Integer> implements IAdoptanteD
         a.setTelefono(d.getString("telefono"));
         a.setEmail(d.getString("email"));
         a.setFechaRegistro(d.getDate("fechaRegistro"));
-        a.setEliminado(d.getBoolean("eliminado", false));
+        a.setEnRefugio(d.getBoolean("eliminado", false));
         a.setDireccion(d.getString("direccion"));
         a.setPreferencias(d.getList("preferencias", String.class, new ArrayList<>()));
         return a;

@@ -1,35 +1,31 @@
 package Models;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Adopcion {
-    public static final String PENDIENTE = "pendiente";
-    public static final String APROBADA = "aprobada";
-    public static final String RECHAZADA = "rechazada";
 
     private int id;                    // se guarda como _id
     private int idAnimal;              // referencia a animales._id
     private int idAdoptante;       // referencia a adoptantes._id
     private Date fechaSolicitud;     // aaaa-mm-dd
     private Date fechaResolucion;    // puede ser null
-    private String estado;
+    private EstadoAdopcion estado;
     private String observaciones;
     private List<Seguimiento> seguimiento = new ArrayList<>();
-    private boolean eliminado;
+    private boolean enRefugio;
 
     public Adopcion() {
     }
 
-    public Adopcion(int id, int idAnimal, int idAdoptante, Date fechaSolicitud, String observaciones) {
-        this.id = id;
+    public Adopcion(int idAnimal, int idAdoptante, Date fechaSolicitud, String observaciones) {
         this.idAnimal = idAnimal;
         this.idAdoptante = idAdoptante;
         this.fechaSolicitud = fechaSolicitud;
         this.observaciones = observaciones;
-        this.estado = PENDIENTE;
+        this.estado = EstadoAdopcion.PENDIENTE;
+        this.enRefugio = true;
     }
 
     public int getId() {
@@ -72,11 +68,11 @@ public class Adopcion {
         this.fechaResolucion = fechaResolucion;
     }
 
-    public String getEstado() {
+    public EstadoAdopcion getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoAdopcion estado) {
         this.estado = estado;
     }
 
@@ -96,12 +92,12 @@ public class Adopcion {
         this.seguimiento = seguimiento;
     }
 
-    public boolean isEliminado() {
-        return eliminado;
+    public boolean isEnRefugio() {
+        return enRefugio;
     }
 
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEnRefugio(boolean enRefugio) {
+        this.enRefugio = enRefugio;
     }
 
     @Override
@@ -109,7 +105,7 @@ public class Adopcion {
         return "[" + id + "] animal: " + idAnimal + " | adoptante: " + idAdoptante
                 + " | solicitud: " + fechaSolicitud
                 + " | resolución: " + (fechaResolucion == null ? "-" : fechaResolucion)
-                + " | estado: " + estado + (eliminado ? " (ELIMINADA)" : "")
+                + " | estado: " + estado + (enRefugio ? " (ELIMINADA)" : "")
                 + "\n      Obs: " + observaciones;
     }
 }

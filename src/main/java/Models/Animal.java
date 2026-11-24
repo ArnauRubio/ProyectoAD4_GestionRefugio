@@ -1,6 +1,5 @@
 package Models;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,7 @@ public class Animal {
     private Date fechaIngreso;    // aaaa-mm-dd
     private EstadoAnimal estado;
     private List<RegistroMedico> historialMedico = new ArrayList<>();
-    private boolean eliminado = false;      // borrado lógico
+    private boolean enRefugio;      // borrado lógico
 
     public Animal() {
     }
@@ -31,6 +30,7 @@ public class Animal {
         this.descripcion = descripcion;
         this.fechaIngreso = fechaIngreso;
         this.estado = estado;
+        this.enRefugio = true;
     }
 
     public int getId() {
@@ -113,19 +113,19 @@ public class Animal {
         this.historialMedico = historialMedico;
     }
 
-    public boolean isEliminado() {
-        return eliminado;
+    public boolean isEnRefugio() {
+        return enRefugio;
     }
 
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
+    public void setEnRefugio(boolean enRefugio) {
+        this.enRefugio = enRefugio;
     }
 
     @Override
     public String toString() {
         return "[" + id + "] " + nombre + " | " + especie + " - " + raza + " | " + edad + " años | "
                 + sexo + " | ingreso: " + fechaIngreso + " | estado: " + estado
-                + (eliminado ? " (ELIMINADO)" : "")
+                + (enRefugio ? " (ELIMINADO)" : "")
                 + "\n      " + descripcion;
     }
 }
