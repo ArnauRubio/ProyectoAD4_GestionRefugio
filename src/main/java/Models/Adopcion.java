@@ -105,7 +105,7 @@ public class Adopcion {
         return "[" + id + "] animal: " + animal + " | adoptante: " + adoptante
                 + " | solicitud: " + fechaSolicitud
                 + " | resolución: " + (fechaResolucion == null ? "-" : fechaResolucion)
-                + " | estado: " + estado + (enRefugio ? " (ELIMINADA)" : "")
+                + " | estado: " + estado + (!enRefugio ? " (ELIMINADA)" : "")
                 + "\n      Obs: " + observaciones;
     }
 }

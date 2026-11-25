@@ -113,7 +113,7 @@ public class Adoptante {
     @Override
     public String toString() {
         return "[" + id + "] " + dni + " | " + nombre + " " + apellidos + " | tel: " + telefono + " | " + email
-                + (enRefugio ? " (ELIMINADO)" : "")
+                + (!enRefugio ? " (ELIMINADO)" : "")
                 + "\n      Dirección: " + direccion
                 + "\n      Registro: " + fechaRegistro + " | Preferencias: " + preferencias;
     }

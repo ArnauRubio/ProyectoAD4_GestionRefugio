@@ -7,6 +7,8 @@ import Models.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -176,8 +178,11 @@ public class App {
         try {
             System.out.print("Edad: ");
             edad = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Error. Introduce una edad válida en números");
+            return;
         } catch (IOException e) {
-            System.out.println("Error. Introduce un entero");
+            System.out.println("Error al leer la edad");
             return;
         }
 
@@ -196,8 +201,16 @@ public class App {
         System.out.print("Descripción: ");
         String descripcion = br.readLine();
 
-        System.out.print("Fecha ingreso (dd/mm/yyyy): ");
-        Date fechaIngreso = new Date(br.readLine());
+        Date fechaIngreso;
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            formato.setLenient(false);
+            System.out.print("Fecha ingreso (dd/mm/yyyy): ");
+            fechaIngreso = formato.parse(br.readLine());
+        } catch (ParseException e) {
+            System.out.println("Fecha no válida. Usa el formato dd/mm/yyyy.");
+            return;
+        }
 
         System.out.print("Estado (Disponible | Reservado | Adoptado | Tratamiento): ");
         EstadoAnimal estado;
@@ -300,16 +313,20 @@ public class App {
         try {
             System.out.print("Edad: ");
             edad = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Error. Introduce una edad válida en números");
+            return;
         } catch (IOException e) {
-            System.out.println("Error. Introduce un entero");
+            System.out.println("Error al leer la edad");
             return;
         }
 
         System.out.print("Sexo (M | H): ");
         Sexo sexo;
-        if (br.readLine().equalsIgnoreCase("M")) {
+        String teclado = br.readLine();
+        if (teclado.equalsIgnoreCase("M")) {
             sexo = Sexo.MACHO;
-        } else if (br.readLine().equalsIgnoreCase("H")) {
+        } else if (teclado.equalsIgnoreCase("H")) {
             sexo = Sexo.HEMBRA;
         } else {
             System.out.println("Elige una de las opciones disponibles");
@@ -321,13 +338,14 @@ public class App {
 
         System.out.print("Estado (Disponible | Reservado | Adoptado | Tratamiento): ");
         EstadoAnimal estado;
-        if (br.readLine().equalsIgnoreCase("disponible")) {
+        String input = br.readLine();
+        if (input.equalsIgnoreCase("disponible")) {
             estado = EstadoAnimal.DISPONIBLE;
-        } else if (br.readLine().equalsIgnoreCase("reservado")) {
+        } else if (input.equalsIgnoreCase("reservado")) {
             estado = EstadoAnimal.RESERVADO;
-        } else if (br.readLine().equalsIgnoreCase("adoptado")) {
+        } else if (input.equalsIgnoreCase("adoptado")) {
             estado = EstadoAnimal.ADOPTADO;
-        } else if (br.readLine().equalsIgnoreCase("tratamiento")) {
+        } else if (input.equalsIgnoreCase("tratamiento")) {
             estado = EstadoAnimal.EN_TRATAMIENTO;
         } else {
             System.out.println("Elige una de las opciones disponibles.");
@@ -526,8 +544,16 @@ public class App {
         System.out.print("Email: ");
         String email = br.readLine();
 
-        System.out.print("Fecha registro (dd/mm/yyyy): ");
-        Date fechaRegistro = new Date(br.readLine());
+        Date fechaRegistro;
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            formato.setLenient(false);
+            System.out.print("Fecha registro (dd/mm/yyyy): ");
+            fechaRegistro = formato.parse(br.readLine());
+        } catch (ParseException e) {
+            System.out.println("Fecha no válida. Usa el formato dd/mm/yyyy.");
+            return;
+        }
         System.out.print("Preferencia: ");
         String pref = br.readLine();
 
@@ -843,10 +869,12 @@ public class App {
 
         Date fecha;
         try {
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            formato.setLenient(false);
             System.out.print("Fecha (dd/mm/yyyy): ");
-            fecha = new Date(br.readLine());
-        } catch (IOException e) {
-            System.out.println("Fecha no válida");
+            fecha = formato.parse(br.readLine());
+        } catch (ParseException e) {
+            System.out.println("Fecha no válida. Usa el formato dd/mm/yyyy.");
             return;
         }
 
@@ -929,23 +957,27 @@ public class App {
         // Nuevos valores
         Date fechaSolic;
         try {
-            System.out.print("Fecha (dd/mm/yyyy): ");
-            fechaSolic = new Date(br.readLine());
-        } catch (IOException e) {
-            System.out.println("Fecha no válida");
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            formato.setLenient(false);
+            System.out.print("Fecha solicitud (dd/mm/yyyy): ");
+            fechaSolic = formato.parse(br.readLine());
+        } catch (ParseException e) {
+            System.out.println("Fecha de solicitud no válida. Usa el formato dd/mm/yyyy.");
             return;
         }
 
         Date fechaResol = null;
-        try {
-            System.out.print("Fecha (dd/mm/yyyy): ");
-            String input = br.readLine();
-            if (!input.isEmpty()) {
-                fechaResol = new Date(input);
+        System.out.print("Fecha resolución (dd/mm/yyyy, vacío si no hay): ");
+        String entradaFechaResolucion = br.readLine();
+        if (!entradaFechaResolucion.trim().isEmpty()) {
+            try {
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                formato.setLenient(false);
+                fechaResol = formato.parse(entradaFechaResolucion);
+            } catch (ParseException e) {
+                System.out.println("Fecha de resolución no válida. Usa el formato dd/mm/yyyy.");
+                return;
             }
-        } catch (IOException e) {
-            System.out.println("Fecha no válida");
-            return;
         }
 
         System.out.print("Observaciones: ");
@@ -953,11 +985,12 @@ public class App {
 
         System.out.print("Estado (Pendiente | Aprobada | Rechazada): ");
         EstadoAdopcion estado;
-        if (br.readLine().equalsIgnoreCase("pendiente")) {
+        String input = br.readLine();
+        if (input.equalsIgnoreCase("pendiente")) {
             estado = EstadoAdopcion.PENDIENTE;
-        } else if (br.readLine().equalsIgnoreCase("aprobada")) {
+        } else if (input.equalsIgnoreCase("aprobada")) {
             estado = EstadoAdopcion.APROBADA;
-        } else if (br.readLine().equalsIgnoreCase("rechazada")) {
+        } else if (input.equalsIgnoreCase("rechazada")) {
             estado = EstadoAdopcion.RECHAZADA;
         } else {
             System.out.println("Elige una de las opciones disponibles.");
@@ -1134,6 +1167,7 @@ public class App {
     }
 
     public static void historialAfiliados() throws IOException {
+        System.out.println("Hemos tenido en total " + all_adoptantes.size() + " afiliados");
         System.out.println("---** Estos son todos los afiliados que hemos tenido **---");
         for (Adoptante a : adoptantes) {
             System.out.println(a.getNombre());
@@ -1142,10 +1176,10 @@ public class App {
     }
 
     public static void historialAnimales() throws IOException {
+        System.out.println("Hemos tenido en total " + all_animales.size() + " animales");
         System.out.println("---** Estos son todos los animales que hemos albergado **---");
         for (Animal a : animales) {
-            System.out.println(a.getNombre());
-            System.out.println(a.getEspecie() + a.getRaza());
+            System.out.println(a.getNombre() + a.getEspecie() + a.getRaza());
         }
     }
 

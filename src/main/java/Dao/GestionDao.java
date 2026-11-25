@@ -1,9 +1,6 @@
 package Dao;
 
 import Idao.IGestionDao;
-import com.mongodb.MongoException;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
@@ -15,19 +12,10 @@ import java.util.List;
 
 public class GestionDao implements IGestionDao {
 
-    // serverSelectionTimeoutMS=3000 -> si el servidor no está arrancado, falla en 3 s y no en 30 s
-    private static final String URI = "mongodb://localhost:27017/?serverSelectionTimeoutMS=3000";
-    private static final String NOMBRE_BD = "refugio";
-
     private static GestionDao instancia;   // el único objeto
-
-    private final MongoClient cliente;
-    private final MongoDatabase baseDatos;
 
     // Constructor privado: nadie puede hacer "new GestionDao()" desde fuera
     private GestionDao() {
-        cliente = MongoClients.create(URI);
-        baseDatos = cliente.getDatabase(NOMBRE_BD);
     }
 
     /**
@@ -44,7 +32,7 @@ public class GestionDao implements IGestionDao {
 
     @Override
     public MongoDatabase getBaseDatos() {
-        return baseDatos;
+        return ConexionBD.getInstancia().getBaseDatos();
     }
 
     /**
@@ -52,12 +40,7 @@ public class GestionDao implements IGestionDao {
      */
     @Override
     public boolean comprobarConexion() {
-        try {
-            baseDatos.runCommand(new Document("ping", 1));
-            return true;
-        } catch (MongoException e) {
-            return false;
-        }
+        return ConexionBD.getInstancia().comprobarConexion();
     }
 
     /**
@@ -65,6 +48,7 @@ public class GestionDao implements IGestionDao {
      */
     @Override
     public void crearIndices() {
+        MongoDatabase baseDatos = getBaseDatos();
         baseDatos.getCollection("animales").createIndex(Indexes.ascending("especie"));
         baseDatos.getCollection("animales").createIndex(Indexes.ascending("estado"));
         baseDatos.getCollection("adoptantes").createIndex(Indexes.ascending("apellidos", "nombre"));
@@ -79,7 +63,7 @@ public class GestionDao implements IGestionDao {
      */
     @Override
     public void cerrar() {
-        cliente.close();
+        ConexionBD.getInstancia().cerrar();
         instancia = null;
     }
 
@@ -87,6 +71,7 @@ public class GestionDao implements IGestionDao {
 
     @Override
     public Document infoBaseDatos() {
+        MongoDatabase baseDatos = getBaseDatos();
         // dbStats es un comando de MongoDB que devuelve estadísticas de la BD
         Document stats = baseDatos.runCommand(new Document("dbStats", 1));
         List<String> colecciones = baseDatos.listCollectionNames().into(new ArrayList<>());
@@ -101,6 +86,7 @@ public class GestionDao implements IGestionDao {
 
     @Override
     public List<Document> infoColecciones() {
+        MongoDatabase baseDatos = getBaseDatos();
         List<Document> lista = new ArrayList<>();
         for (String nombre : baseDatos.listCollectionNames()) {
             MongoCollection<Document> col = baseDatos.getCollection(nombre);
@@ -118,6 +104,7 @@ public class GestionDao implements IGestionDao {
 
     @Override
     public List<Document> infoIndices() {
+        MongoDatabase baseDatos = getBaseDatos();
         List<Document> lista = new ArrayList<>();
         for (String nombre : baseDatos.listCollectionNames()) {
             for (Document indice : baseDatos.getCollection(nombre).listIndexes()) {

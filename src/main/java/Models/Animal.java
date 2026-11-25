@@ -125,7 +125,7 @@ public class Animal {
     public String toString() {
         return "[" + id + "] " + nombre + " | " + especie + " - " + raza + " | " + edad + " años | "
                 + sexo + " | ingreso: " + fechaIngreso + " | estado: " + estado
-                + (enRefugio ? " (ELIMINADO)" : "")
+                + (!enRefugio ? " (ELIMINADO)" : "")
                 + "\n      " + descripcion;
     }
 }
