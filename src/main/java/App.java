@@ -1130,7 +1130,7 @@ public class App {
 
     public static void informacionGeneral() throws IOException {
         System.out.println("---**********************---");
-        System.out.println("--- Bienvenido al Refugio" + refugio.getNombre() + "  ---");
+        System.out.println("--- Bienvenido al Refugio " + refugio.getNombre() + "  ---");
         System.out.println("En este lugar, abierto en " + refugio.getFechaApertura() + " nos tomamos muy en serio las animaladas, tanto que asi \n" +
                 " que damos la bienvenida con brazos abiertos a todos los animales que te puedas imaginar. \n" +
                 "Desde animales abandonados, exoticos o simplemente que ya no pueden ser cuidados por sus anteriores dueños \n" +
@@ -1199,16 +1199,7 @@ public class App {
         System.out.println("------");
         System.out.println("--- Mostrar lista ---");
         for (int i = 0; i < lista.size(); i++) {
-            //Object elemento = lista.get(i);
-            //System.out.println(i + " - " + elemento);
             System.out.println(i + " - " + lista.get(i));
-//            if (elemento instanceof Proveedor) {
-//                mostrarGestionesAsociadas(((Proveedor) elemento).getGestiones());
-//            } else if (elemento instanceof Pieza) {
-//                mostrarGestionesAsociadas(((Pieza) elemento).getGestiones());
-//            } else if (elemento instanceof Proyecto) {
-//                mostrarGestionesAsociadas(((Proyecto) elemento).getGestiones());
-//            }
         }
     }
 }
