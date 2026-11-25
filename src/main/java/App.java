@@ -117,7 +117,8 @@ public class App {
                     "\t5) Búsqueda por nombre\n" +
                     "\t6) Búsqueda por especie\n" +
                     "\t7) Búsqueda por raza\n" +
-                    "\t8) Volver\n" +
+                    "\t8) Historial médico\n" +
+                    "\t9) Volver\n" +
                     "--> Opción: "
             );
             try {
@@ -152,12 +153,15 @@ public class App {
                     buscarAnimalPorRaza();
                     break;
                 case 8:
+                    menuHistorialMedico();
+                    break;
+                case 9:
                     System.out.println("*Volviendo al menú principal");
                     break;
                 default:
-                    System.out.println("Error: Introduce un numero entero del 1 al 8");
+                    System.out.println("Error: Introduce un numero entero del 1 al 9");
             }
-        } while (opcion != 8);
+        } while (opcion != 9);
     }
 
     /**
@@ -466,6 +470,123 @@ public class App {
         }
     }
 
+    public static void menuHistorialMedico() throws IOException {
+        int opcion = -1;
+        do {
+            System.out.println("------");
+            System.out.print("=== Menú historial médico ===\n" +
+                    "\t1) Consultar historial\n" +
+                    "\t2) Nueva consulta\n" +
+                    "\t3) Volver\n" +
+                    "--> Opción: "
+            );
+            try {
+                opcion = Integer.parseInt(br.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Valor no válido");
+                continue;
+            } catch (IOException e) {
+                System.out.println("Error");
+            }
+
+            switch (opcion) {
+                case 1:
+                    consultarHistorialMedico();
+                    break;
+                case 2:
+                    nuevaConsultaMedica();
+                    break;
+                case 3:
+                    System.out.println("*Volviendo al menú principal");
+                    break;
+                default:
+                    System.out.println("Error: Introduce un numero entero del 1 al 3");
+            }
+        } while (opcion != 3);
+    }
+
+    public static void consultarHistorialMedico() {
+        System.out.println("------");
+        System.out.println("--- Consultar historial médico ---");
+
+        // Se muestra lista de animales y eligen uno
+        mostrarLista(animales);
+
+        System.out.print("--> Elige: ");
+        int opcion = -1;
+        try {
+            opcion = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor no válido");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+
+        if (opcion < 0 || opcion >= animales.size()) {
+            System.out.println("Índice no válido");
+            return;
+        }
+
+        Animal animal = animales.get(opcion);
+        // Mostrar historial de ese animal
+        System.out.println("------");
+        System.out.println("Historial médico:");
+        for (RegistroMedico registro : animal.getHistorialMedico()) {
+            System.out.println("--> (" + registro.getFecha() + ") " + registro.getVeterinario() + ":");
+            System.out.println(registro.getDescripcion());
+            System.out.println("---------");
+        }
+    }
+
+    public static void nuevaConsultaMedica() throws IOException {
+        System.out.println("------");
+        System.out.println("--- Nueva consulta médica ---");
+
+        // Se muestra lista de animales y eligen uno
+        mostrarLista(animales);
+
+        System.out.print("--> Elige: ");
+        int opcion = -1;
+        try {
+            opcion = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Valor no válido");
+            return;
+        } catch (IOException e) {
+            System.out.println("Error");
+        }
+
+        if (opcion < 0 || opcion >= animales.size()) {
+            System.out.println("Índice no válido");
+            return;
+        }
+
+        Animal animal = animales.get(opcion);
+        // Nueva consulta
+        System.out.println("------");
+        Date fecha = null;
+        try {
+            System.out.print("Fecha (dd/mm/yyyy): ");
+            fecha = new Date(br.readLine());
+        } catch (IOException e) {
+            System.out.println("Fecha no válida, sigue el formato del ejemplo");
+            return;
+        }
+        System.out.print("Descripción: ");
+        String descripcion = br.readLine();
+        System.out.print("Veterinario: ");
+        String vet = br.readLine();
+        RegistroMedico reg;
+        try {
+             reg = new RegistroMedico(fecha, descripcion, vet);
+        } catch (Exception e) {
+            System.out.println("Error, no se ha podido crear el registro");
+            return;
+        }
+        animal.getHistorialMedico().add(reg);
+    }
+
     /**
      * Muestra las opciones para administrar adoptantes.
      */
@@ -481,7 +602,8 @@ public class App {
                     "\t5) Búsqueda por nombre\n" +
                     "\t6) Búsqueda por apellidos\n" +
                     "\t7) Búsqueda por DNI\n" +
-                    "\t8) Volver\n" +
+                    "\t8) Consultar solicitudes y adopciones\n" +
+                    "\t9) Volver\n" +
                     "--> Opción: "
             );
             try {
